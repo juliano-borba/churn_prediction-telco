@@ -3,6 +3,8 @@
 Este projeto demonstra a aplicação de técnicas de Machine Learning e Deep Learning para prever o churn (cancelamento de clientes). Nele, são exploradas diversas etapas essenciais, desde o pré-processamento dos dados até a avaliação de diferentes modelos de classificação.
 
 ## Descrição do Projeto
+Os dados foram extraídos dessa base de dados do Kaggle: https://www.kaggle.com/datasets/blastchar/telco-customer-churn
+
 O objetivo deste projeto é comparar a performance de diversos algoritmos de classificação para o problema de churn. O script realiza as seguintes etapas:
 
 
