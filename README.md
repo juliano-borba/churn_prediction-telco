@@ -31,7 +31,7 @@ README.md: Este arquivo, com informações sobre o projeto, instruções e detal
 
 Para executar este projeto, você precisará ter instalado:
 
-Python 3.x
+Python 3.9.1
 
 Bibliotecas:
 
