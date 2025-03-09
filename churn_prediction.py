@@ -20,7 +20,7 @@ from tensorflow.keras.optimizers import Adam  # Otimizador Adam para treinamento
 # --------------------------------------------------------------------
 # Carrega o dataset de churn a partir de um arquivo CSV. 
 # Esse dataset contém informações sobre clientes e se eles cancelaram (churn) ou não.
-df = pd.read_csv(r'C:\Users\julia\Repos\juliano\TensorFlow\Churn.csv')
+df = pd.read_csv('Churn.csv')
 
 # --------------------------------------------------------------------
 # 2. Pré-processamento dos Dados
