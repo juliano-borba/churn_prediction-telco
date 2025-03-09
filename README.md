@@ -2,61 +2,42 @@
 
 Este projeto demonstra a aplicação de técnicas de Machine Learning e Deep Learning para prever o churn (cancelamento de clientes). Nele, são exploradas diversas etapas essenciais, desde o pré-processamento dos dados até a avaliação de diferentes modelos de classificação.
 
-Descrição do Projeto
+## Descrição do Projeto
 O objetivo deste projeto é comparar a performance de diversos algoritmos de classificação para o problema de churn. O script realiza as seguintes etapas:
 
+
 Carregamento e pré-processamento: Leitura do dataset, tratamento de valores nulos e normalização dos dados.
+
 Preparação dos dados: Transformação de variáveis categóricas em variáveis dummy e separação da variável alvo.
+
 Seleção de Features: Utilização do RFE (Recursive Feature Elimination) para selecionar as 10 melhores features.
+
 Treinamento de Modelos Clássicos: Teste de algoritmos como Regressão Logística, Árvore de Decisão, Random Forest, SVM e KNN.
+
 Modelo de Rede Neural: Construção, treinamento e avaliação de uma rede neural com Keras.
+
 Comparação de Resultados: Impressão das acurácias de cada modelo para facilitar a análise de desempenho.
+
 Estrutura do Repositório
 churn_ml_script.py: Script principal com todo o código comentado e detalhado.
+
 README.md: Este arquivo, com informações sobre o projeto, instruções e detalhes técnicos.
+
 (Opcional) Outros arquivos ou pastas que contenham dados, resultados ou documentação adicional.
-Pré-requisitos
+
+## Pré-requisitos
+
 Para executar este projeto, você precisará ter instalado:
 
 Python 3.x
+
 Bibliotecas:
+
 pandas
 scikit-learn
 tensorflow (inclui Keras)
-Você pode instalar as dependências utilizando o seguinte comando:
 
-bash
-Copiar
-Editar
-pip install pandas scikit-learn tensorflow
-Observação: Se você estiver em um ambiente sem GPU, pode optar por instalar a versão tensorflow-cpu.
-
-Instruções de Execução
-Clone o Repositório:
-
-bash
-Copiar
-Editar
-git clone https://github.com/SEU_USUARIO/machine-learning-portfolio.git
-Navegue até o Diretório do Projeto:
-
-bash
-Copiar
-Editar
-cd machine-learning-portfolio
-Verifique o Dataset:
-
-Certifique-se de que o arquivo Churn.csv esteja no caminho especificado no script ou ajuste o caminho conforme necessário.
-
-Execute o Script:
-
-bash
-Copiar
-Editar
-python churn_ml_script.py
-O script realizará o pré-processamento, seleção de features, treinamento e avaliação dos modelos, imprimindo as acurácias de cada abordagem.
-
-Detalhes do Script
+## Detalhes do Script
 O código está organizado nas seguintes seções:
 
 Carregamento do Dataset:
