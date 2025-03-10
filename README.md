@@ -1,78 +1,96 @@
-# Machine Learning Portfolio: Predição de Churn #
+# Machine Learning Portfolio: Churn Prediction  
 
-Este projeto demonstra a aplicação de técnicas de Machine Learning e Deep Learning para prever o churn (cancelamento de clientes). Nele, são exploradas diversas etapas essenciais, desde o pré-processamento dos dados até a avaliação de diferentes modelos de classificação.
+This project demonstrates the application of Machine Learning and Deep Learning techniques to predict churn (customer cancellation). It explores various essential steps, from data preprocessing to evaluating different classification models.  
 
-## Descrição do Projeto
-Os dados foram extraídos dessa base de dados do Kaggle: https://www.kaggle.com/datasets/blastchar/telco-customer-churn
+## 📌 Project Description  
+The data was extracted from this Kaggle dataset: [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).  
 
-O objetivo deste projeto é comparar a performance de diversos algoritmos de classificação para o problema de churn. O script realiza as seguintes etapas:
+The goal of this project is to compare the performance of various classification algorithms for the churn problem. The script performs the following steps:  
 
+### 🔹 Data Processing  
+- **Data Loading and Preprocessing**: Reads the dataset, handles missing values, and normalizes the data.  
+- **Data Preparation**: Converts categorical variables into dummy variables and separates the target variable.  
+- **Feature Selection**: Uses RFE (Recursive Feature Elimination) to select the top 10 features.  
 
-Carregamento e pré-processamento: Leitura do dataset, tratamento de valores nulos e normalização dos dados.
+### 🔹 Model Training  
+- **Classical Models**: Tests algorithms such as Logistic Regression, Decision Tree, Random Forest, SVM, and KNN.  
+- **Neural Network Model**: Builds, trains, and evaluates a neural network using Keras.  
 
-Preparação dos dados: Transformação de variáveis categóricas em variáveis dummy e separação da variável alvo.
+### 🔹 Results Evaluation  
+- Displays the accuracy of each model to facilitate performance analysis.  
 
-Seleção de Features: Utilização do RFE (Recursive Feature Elimination) para selecionar as 10 melhores features.
+## ⚙️ Prerequisites  
 
-Treinamento de Modelos Clássicos: Teste de algoritmos como Regressão Logística, Árvore de Decisão, Random Forest, SVM e KNN.
+To run this project, you will need to have the following installed:  
 
-Modelo de Rede Neural: Construção, treinamento e avaliação de uma rede neural com Keras.
+### 🛠️ Required Tools  
+- **Python 3.9.1**  
+- **Libraries**:  
+  - `pandas`  
+  - `scikit-learn`  
+  - `tensorflow` (includes Keras)  
 
-Comparação de Resultados: Impressão das acurácias de cada modelo para facilitar a análise de desempenho.
+---
 
-Estrutura do Repositório
-churn_ml_script.py: Script principal com todo o código comentado e detalhado.
+## 📝 Script Details  
 
-README.md: Este arquivo, com informações sobre o projeto, instruções e detalhes técnicos.
+The code is organized into the following sections:  
 
-(Opcional) Outros arquivos ou pastas que contenham dados, resultados ou documentação adicional.
+### 🔹 1. Dataset Loading  
+- Reads the CSV file and loads the data into a Pandas DataFrame.  
 
-## Pré-requisitos
+### 🔹 2. Preprocessing  
+- Handles missing values and converts the `'Total Charges'` column to a numeric type.  
+- Normalizes numerical columns using `MinMaxScaler`.  
 
-Para executar este projeto, você precisará ter instalado:
+### 🔹 3. Data Preparation  
+- Converts categorical variables into dummy variables.  
+- Separates the target variable (**Churn**) and transforms it into binary values (0 = "No", 1 = "Yes").  
 
-Python 3.9.1
+### 🔹 4. Data Splitting  
+- Splits the dataset into training and testing sets (80%/20%).  
 
-Bibliotecas:
+### 🔹 5. Feature Selection with RFE  
+- Uses logistic regression to select the top 10 features from the dataset.  
 
-pandas
-scikit-learn
-tensorflow (inclui Keras)
+### 🔹 6. Training Classical Models  
+- Trains and evaluates models:  
+  - Logistic Regression  
+  - Decision Tree  
+  - Random Forest  
+  - SVM  
+  - KNN  
+- Displays the accuracy of each model.  
 
-## Detalhes do Script
-O código está organizado nas seguintes seções:
+### 🔹 7. Neural Network Model with Keras  
+- Builds a neural network with two hidden layers and Dropout regularization.  
+- Trains and evaluates performance on the test set.  
 
-Carregamento do Dataset:
-Lê o arquivo CSV e carrega os dados em um DataFrame do pandas.
+---
 
-Pré-processamento:
-Trata os valores ausentes e converte a coluna 'Total Charges' para o tipo numérico. Em seguida, normaliza as colunas numéricas utilizando MinMaxScaler.
+## 📊 Results  
 
-Preparação dos Dados:
-Converte variáveis categóricas em dummies e separa a variável alvo (Churn) transformando-a em valores binários (0 para "No" e 1 para "Yes").
+After running the script, the accuracy of different models will be displayed in the terminal. This comparison helps identify which approach best fits the churn problem for this dataset.  
 
-Divisão dos Dados:
-Divide o dataset em conjuntos de treino e teste (80%/20%).
+---
 
-Seleção de Features com RFE:
-Utiliza uma regressão logística para selecionar as 10 melhores features do dataset.
+## 🤝 Contributions  
 
-Treinamento de Modelos Clássicos:
-Treina e avalia modelos como Regressão Logística, Árvore de Decisão, Random Forest, SVM e KNN, exibindo a acurácia de cada um.
+Contributions are welcome! If you would like to improve this project, feel free to:  
 
-Modelo de Rede Neural com Keras:
-Constrói uma rede neural com duas camadas ocultas e regularização via Dropout, treinando e avaliando sua performance no conjunto de teste.
+- 🐞 Open **issues** to report bugs or suggest improvements.  
+- ✨ Submit **pull requests** with new features or fixes.  
 
-Resultados
-Após a execução do script, serão exibidas as acurácias dos diferentes modelos no terminal. Essa comparação ajuda a identificar qual abordagem se adapta melhor ao problema de churn neste dataset.
+---
 
-Contribuições
-Contribuições são bem-vindas! Se você deseja melhorar este projeto, sinta-se à vontade para:
+## 📜 License  
 
-Abrir issues para reportar bugs ou sugerir melhorias.
-Submeter pull requests com novas funcionalidades ou correções.
-Licença
-Este projeto está licenciado sob a MIT License.
+This project is licensed under the **MIT License**.  
 
-Contato
-Caso tenha dúvidas ou sugestões, entre em contato por meio das issues do GitHub ou pelo seu e-mail.
+---
+
+## 📬 Contact  
+
+If you have any questions or suggestions, feel free to reach out via **GitHub Issues** or email.  
+
+🚀 Happy Coding!  
