@@ -1,118 +1,118 @@
-# Importação das bibliotecas necessárias
-import pandas as pd  # Para manipulação e análise de dados
-from sklearn.model_selection import train_test_split  # Para dividir os dados em treino e teste
-from sklearn.preprocessing import MinMaxScaler  # Para normalizar os dados
-from sklearn.feature_selection import RFE  # Para seleção recursiva de features (Recursive Feature Elimination)
-from sklearn.linear_model import LogisticRegression  # Modelo de regressão logística
-from sklearn.tree import DecisionTreeClassifier  # Modelo de Árvore de Decisão
-from sklearn.ensemble import RandomForestClassifier  # Modelo de Floresta Aleatória (Random Forest)
-from sklearn.svm import SVC  # Modelo de Máquina de Vetores de Suporte (SVM)
-from sklearn.neighbors import KNeighborsClassifier  # Modelo de K-Nearest Neighbors (KNN)
-from sklearn.metrics import accuracy_score  # Para calcular a acurácia das predições
+# Importing the necessary libraries
+import pandas as pd  # For data manipulation and analysis
+from sklearn.model_selection import train_test_split  # To split data into training and testing sets
+from sklearn.preprocessing import MinMaxScaler  # To normalize data
+from sklearn.feature_selection import RFE  # Recursive Feature Elimination (RFE) for feature selection
+from sklearn.linear_model import LogisticRegression  # Logistic Regression model
+from sklearn.tree import DecisionTreeClassifier  # Decision Tree model
+from sklearn.ensemble import RandomForestClassifier  # Random Forest model
+from sklearn.svm import SVC  # Support Vector Machine (SVM) model
+from sklearn.neighbors import KNeighborsClassifier  # K-Nearest Neighbors (KNN) model
+from sklearn.metrics import accuracy_score  # To calculate prediction accuracy
 
-# Importações para construir o modelo de rede neural com Keras
-from tensorflow.keras.models import Sequential  # Para criar modelos sequenciais
-from tensorflow.keras.layers import Dense, Dropout  # Camadas densas (fully connected) e Dropout para regularização
-from tensorflow.keras.optimizers import Adam  # Otimizador Adam para treinamento da rede
-
-# --------------------------------------------------------------------
-# 1. Carregamento do Dataset
-# --------------------------------------------------------------------
-# Carrega o dataset de churn a partir de um arquivo CSV. 
-# Esse dataset contém informações sobre clientes e se eles cancelaram (churn) ou não.
-df = pd.read_csv('Churn.csv')
+# Imports for building the neural network model with Keras
+from tensorflow.keras.models import Sequential  # To create sequential models
+from tensorflow.keras.layers import Dense, Dropout  # Fully connected (Dense) layers and Dropout for regularization
+from tensorflow.keras.optimizers import Adam  # Adam optimizer for network training
 
 # --------------------------------------------------------------------
-# 2. Pré-processamento dos Dados
+# 1. Dataset Loading
 # --------------------------------------------------------------------
-# Trata a coluna 'Total Charges':
-# - Substitui valores vazios ('') por 0
+# Loads the churn dataset from a CSV file. 
+# This dataset contains customer information and whether they churned or not.
+df = pd.read_csv(r'C:\Users\julia\Repos\juliano\TensorFlow\Churn.csv')
+
+# --------------------------------------------------------------------
+# 2. Data Preprocessing
+# --------------------------------------------------------------------
+# Processing the 'Total Charges' column:
+# - Replaces empty values ('') with 0
 df['Total Charges'] = df['Total Charges'].replace('', 0)
 
-# - Preenche valores nulos (NaN) com 0
+# - Fills null values (NaN) with 0
 df['Total Charges'] = df['Total Charges'].fillna(0)
 
-# - Converte a coluna 'Total Charges' para tipo numérico (float), tratando erros e substituindo possíveis NaN por 0
+# - Converts the 'Total Charges' column to numeric (float), handling errors and replacing possible NaN with 0
 df['Total Charges'] = pd.to_numeric(df['Total Charges'], errors='coerce').fillna(0)
 
 # --------------------------------------------------------------------
-# 3. Normalização dos Dados Numéricos
+# 3. Normalization of Numerical Data
 # --------------------------------------------------------------------
-# Cria um objeto MinMaxScaler para normalizar os dados entre 0 e 1
+# Creates a MinMaxScaler object to normalize data between 0 and 1
 scaler = MinMaxScaler()
 
-# Normaliza as colunas 'tenure', 'Monthly Charges' e 'Total Charges'
+# Normalizes the 'tenure', 'Monthly Charges', and 'Total Charges' columns
 df[['tenure', 'Monthly Charges', 'Total Charges']] = scaler.fit_transform(
     df[['tenure', 'Monthly Charges', 'Total Charges']]
 )
 
 # --------------------------------------------------------------------
-# 4. Preparação dos Dados para Modelagem
+# 4. Data Preparation for Modeling
 # --------------------------------------------------------------------
-# Separa as features (variáveis explicativas) e a variável alvo (target)
-# - Remove as colunas 'Churn' (que será a variável alvo) e 'Customer ID' (não é útil para predição)
-# - Converte variáveis categóricas em variáveis dummy (one-hot encoding)
+# Separates features (explanatory variables) and the target variable
+# - Removes the 'Churn' column (which will be the target variable) and 'Customer ID' (not useful for prediction)
+# - Converts categorical variables into dummy variables (one-hot encoding)
 X = pd.get_dummies(df.drop(['Churn', 'Customer ID'], axis=1))
 
-# Cria a variável alvo 'y' transformando 'Yes' em 1 e 'No' em 0
+# Creates the target variable 'y', transforming 'Yes' into 1 and 'No' into 0
 y = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0)
 
 # --------------------------------------------------------------------
-# 5. Divisão dos Dados em Conjuntos de Treino e Teste
+# 5. Splitting Data into Training and Testing Sets
 # --------------------------------------------------------------------
-# Divide os dados em 80% para treinamento e 20% para teste
+# Splits data into 80% for training and 20% for testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # --------------------------------------------------------------------
-# 6. Seleção de Features Utilizando RFE (Recursive Feature Elimination)
+# 6. Feature Selection Using RFE (Recursive Feature Elimination)
 # --------------------------------------------------------------------
-# Utiliza uma regressão logística como estimador base para o RFE
+# Uses logistic regression as the base estimator for RFE
 model_lr = LogisticRegression()
 
-# Configura o RFE para selecionar as 10 melhores features com base na importância determinada pelo modelo
+# Configures RFE to select the top 10 features based on their importance determined by the model
 selector = RFE(model_lr, n_features_to_select=10)
 
-# Ajusta (treina) o RFE com os dados de treinamento
+# Fits (trains) RFE with the training data
 selector = selector.fit(X_train, y_train)
 
-# Identifica os nomes das colunas selecionadas pelo RFE
+# Identifies the column names selected by RFE
 selected_columns = X_train.columns[selector.support_]
-print("Colunas selecionadas:", selected_columns)
+print("Selected columns:", selected_columns)
 
-# Filtra os conjuntos de dados para manter apenas as features selecionadas
+# Filters datasets to keep only the selected features
 X_train_selected = X_train[selected_columns]
 X_test_selected = X_test[selected_columns]
 
 # --------------------------------------------------------------------
-# 7. Função para Treinamento e Avaliação de Modelos Clássicos
+# 7. Function for Training and Evaluating Classic Models
 # --------------------------------------------------------------------
 def train_and_evaluate(model, model_name):
     """
-    Treina um modelo de machine learning, realiza predições no conjunto de teste 
-    e imprime a acurácia do modelo.
+    Trains a machine learning model, makes predictions on the test set, 
+    and prints the model's accuracy.
     
-    Parâmetros:
-        model : objeto do modelo a ser treinado (ex: LogisticRegression, DecisionTreeClassifier, etc.)
-        model_name : nome do modelo (string) para exibição dos resultados
+    Parameters:
+        model : the model object to be trained (e.g., LogisticRegression, DecisionTreeClassifier, etc.)
+        model_name : name of the model (string) for displaying results
     """
-    # Treina o modelo utilizando os dados de treinamento com features selecionadas
+    # Trains the model using the training data with selected features
     model.fit(X_train_selected, y_train)
     
-    # Realiza predições no conjunto de teste
+    # Makes predictions on the test set
     y_hat = model.predict(X_test_selected)
     
-    # Calcula a acurácia comparando as predições com os valores reais do teste
+    # Calculates accuracy by comparing predictions with actual test values
     accuracy = accuracy_score(y_test, y_hat)
     
-    # Imprime a acurácia formatada com 4 casas decimais
-    print(f"Acurácia do modelo {model_name}: {accuracy:.4f}")
+    # Prints accuracy formatted to 4 decimal places
+    print(f"Accuracy of the {model_name} model: {accuracy:.4f}")
     
     return accuracy
 
 # --------------------------------------------------------------------
-# 8. Treinamento e Avaliação de Modelos Clássicos de Machine Learning
+# 8. Training and Evaluating Classic Machine Learning Models
 # --------------------------------------------------------------------
-# Cria um dicionário contendo os modelos a serem testados
+# Creates a dictionary containing the models to be tested
 models = {
     "Logistic Regression": LogisticRegression(),
     "Decision Tree": DecisionTreeClassifier(),
@@ -121,54 +121,54 @@ models = {
     "KNN": KNeighborsClassifier()
 }
 
-# Itera sobre cada modelo, treina e avalia, exibindo a acurácia de cada um
+# Iterates over each model, trains and evaluates, displaying the accuracy of each
 for name, model in models.items():
     train_and_evaluate(model, name)
 
 # --------------------------------------------------------------------
-# 9. Construção, Treinamento e Avaliação de um Modelo de Rede Neural com Keras
+# 9. Building, Training, and Evaluating a Neural Network Model with Keras
 # --------------------------------------------------------------------
-# Cria um modelo sequencial (empilhamento linear de camadas)
+# Creates a sequential model (linear stacking of layers)
 model_nn = Sequential()
 
-# Adiciona a primeira camada oculta:
-# - 64 neurônios
-# - Função de ativação 'relu'
-# - 'input_dim' definido com o número de features selecionadas
+# Adds the first hidden layer:
+# - 64 neurons
+# - Activation function: 'relu'
+# - 'input_dim' set to the number of selected features
 model_nn.add(Dense(units=64, activation='relu', input_dim=len(X_train_selected.columns)))
 
-# Adiciona uma camada de Dropout para reduzir overfitting, descartando 50% dos neurônios aleatoriamente durante o treinamento
+# Adds a Dropout layer to reduce overfitting, randomly discarding 50% of neurons during training
 model_nn.add(Dropout(0.5))
 
-# Adiciona uma segunda camada oculta com 128 neurônios e função de ativação 'relu'
+# Adds a second hidden layer with 128 neurons and 'relu' activation function
 model_nn.add(Dense(units=128, activation='relu'))
 
-# Adiciona a camada de saída:
-# - 1 neurônio, pois o problema é de classificação binária
-# - Função de ativação 'sigmoid' para produzir uma saída entre 0 e 1 (probabilidade)
+# Adds the output layer:
+# - 1 neuron, as this is a binary classification problem
+# - Activation function: 'sigmoid' to produce an output between 0 and 1 (probability)
 model_nn.add(Dense(units=1, activation='sigmoid'))
 
-# Define o otimizador Adam com uma taxa de aprendizado de 0.001
+# Defines the Adam optimizer with a learning rate of 0.001
 optimizer = Adam(learning_rate=0.001)
 
-# Compila o modelo especificando:
-# - Função de perda: 'binary_crossentropy', apropriada para classificação binária
-# - Otimizador: Adam
-# - Métrica: acurácia (accuracy)
+# Compiles the model specifying:
+# - Loss function: 'binary_crossentropy', appropriate for binary classification
+# - Optimizer: Adam
+# - Metric: accuracy
 model_nn.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
-# Treina o modelo neural:
-# - epochs: número de iterações sobre o conjunto de dados
-# - batch_size: número de amostras por atualização dos pesos
-# - validation_data: dados de validação para monitorar o desempenho durante o treinamento
+# Trains the neural network:
+# - epochs: number of iterations over the dataset
+# - batch_size: number of samples per weight update
+# - validation_data: validation set to monitor performance during training
 model_nn.fit(X_train_selected, y_train, epochs=200, batch_size=32, validation_data=(X_test_selected, y_test), verbose=1)
 
-# Realiza predições no conjunto de teste usando o modelo neural
+# Makes predictions on the test set using the neural network model
 y_hat_nn = model_nn.predict(X_test_selected)
 
-# Converte as predições (probabilidades) em classes:
-# Se a probabilidade for menor que 0.5, atribui 0; caso contrário, atribui 1
+# Converts predictions (probabilities) into classes:
+# If probability is less than 0.5, assign 0; otherwise, assign 1
 y_hat_nn = [0 if val < 0.5 else 1 for val in y_hat_nn]
 
-# Calcula e imprime a acurácia do modelo neural
-print(f"Acurácia do modelo Neural: {accuracy_score(y_test, y_hat_nn):.4f}")
+# Calculates and prints the neural network model's accuracy
+print(f"Neural Network model accuracy: {accuracy_score(y_test, y_hat_nn):.4f}")
